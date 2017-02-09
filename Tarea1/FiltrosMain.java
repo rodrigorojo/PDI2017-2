@@ -2,7 +2,9 @@ public class FiltrosMain{
   public static void main(String[] args){
     Filtros f = new Filtros();
     String img = "K.jpg";
-    f.creaImagen(f.randomRGB(900,800), "random");
+    Interfaz in = new Interfaz();
+    in.run();
+    /*f.creaImagen(f.randomRGB(900,800), "random");
     f.creaImagen(f.unColor(255,0,0,900,800),"rojo");
     f.creaImagen(f.unColor(0,255,0,900,800),"verde");
     f.creaImagen(f.unColor(0,0,255,900,800),"azul");
@@ -22,6 +24,6 @@ public class FiltrosMain{
     f.creaImagen(f.inverso(img),"inverso");
     f.creaImagen(f.brillo(100,img),"brilloAlto");
     f.creaImagen(f.brillo(-100,img),"brilloBajo");
-    f.creaImagen(f.mosaico(25,25,img), "mosaico");
+    f.creaImagen(f.mosaico(25,25,img), "mosaico");*/
   }
 }
