@@ -18,10 +18,20 @@ import javax.imageio.ImageIO;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitMenuButton;
-
+import javafx.scene.Parent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Label;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.layout.ColumnConstraints;
 /**
  *
  */
+ @SuppressWarnings("unchecked")
 public class Interfaz extends Application {
 
     ImageView iv1;
@@ -149,12 +159,98 @@ public class Interfaz extends Application {
         });
         f8.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            iv2.setImage(SwingFXUtils.toFXImage(f.brillo(100,ruta), null));
+            Stage stageBrillo = new Stage();
+            GridPane gridpaneBrillo = new GridPane();
+            ColumnConstraints col1 = new ColumnConstraints();
+            ColumnConstraints col2 = new ColumnConstraints();
+            col2.setMinWidth(400);
+            gridpaneBrillo.getColumnConstraints().addAll(col1,col2);
+            Label labelBrillo = new Label("Brillo");
+            Slider sliderBrillo = new Slider(-180, 180, 0);
+            Label sliderBrilloValor = new Label("0");
+            Button buttonBrillo = new Button("Aplicar");
+            gridpaneBrillo.setConstraints(labelBrillo, 1,1);
+            gridpaneBrillo.setConstraints(sliderBrillo, 1,2);
+            gridpaneBrillo.setConstraints(sliderBrilloValor, 2,2);
+            gridpaneBrillo.setConstraints(buttonBrillo, 2,5);
+            gridpaneBrillo.getChildren().addAll(labelBrillo,sliderBrillo,sliderBrilloValor,buttonBrillo);
+            Scene sceneBrillo = new Scene(gridpaneBrillo, 470, 70);
+            stageBrillo.setTitle("Ajsutar Brillo");
+            stageBrillo.setScene(sceneBrillo);
+            stageBrillo.show();
+            sliderBrillo.valueProperty().addListener(new ChangeListener() {
+              @Override
+                public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                    sliderBrilloValor.textProperty().setValue(
+                            String.valueOf((int) sliderBrillo.getValue()));
+                            sliderBrillo.setValue(sliderBrillo.getValue());
+                }
+            });
+            buttonBrillo.setOnAction(new EventHandler<ActionEvent>() {
+              public void handle(ActionEvent t) {
+                iv2.setImage(SwingFXUtils.toFXImage(f.brillo((int)sliderBrillo.getValue(),ruta), null));
+              }
+            });
           }
         });
         f9.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            iv2.setImage(SwingFXUtils.toFXImage(f.mosaico(25,25,ruta), null));
+            try{
+              Stage stageMosaico = new Stage();
+
+              int defaultValor = (int) image.getWidth()/9;
+              int maxMosaico = (int) image.getWidth()/5;
+
+              GridPane gridpaneMosaico = new GridPane();
+              ColumnConstraints col1 = new ColumnConstraints();
+              ColumnConstraints col2 = new ColumnConstraints();
+              col2.setMinWidth(400);
+              gridpaneMosaico.getColumnConstraints().addAll(col1,col2);
+              Label labelAncho = new Label("Ancho");
+              Slider sliderAncho = new Slider(1, maxMosaico, defaultValor);
+              Label sliderAnchoValor = new Label(defaultValor+"");
+              Label labelAlto = new Label("Alto");
+              Slider sliderAlto = new Slider(1, maxMosaico, defaultValor);
+              Label sliderAltoValor = new Label(defaultValor+"");
+              Button buttonMosaico = new Button("Aplicar");
+              gridpaneMosaico.setConstraints(labelAncho, 1,1);
+              gridpaneMosaico.setConstraints(sliderAncho, 1,2);
+              gridpaneMosaico.setConstraints(sliderAnchoValor, 2,2);
+              gridpaneMosaico.setConstraints(labelAlto, 1,3);
+              gridpaneMosaico.setConstraints(sliderAlto, 1,4);
+              gridpaneMosaico.setConstraints(sliderAltoValor, 2,4);
+              gridpaneMosaico.setConstraints(buttonMosaico, 2,5);
+              gridpaneMosaico.getChildren().addAll(labelAncho,sliderAncho,sliderAnchoValor,labelAlto,sliderAlto,sliderAltoValor,buttonMosaico);
+              Scene sceneMosaico = new Scene(gridpaneMosaico, 470, 100);
+              stageMosaico.setTitle("Tamaño de los mosaicos");
+              stageMosaico.setScene(sceneMosaico);
+              stageMosaico.show();
+              sliderAncho.valueProperty().addListener(new ChangeListener() {
+                @Override
+                  public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                      sliderAnchoValor.textProperty().setValue(
+                              String.valueOf((int) sliderAncho.getValue()));
+                              sliderAlto.setValue(sliderAncho.getValue());
+                  }
+              });
+              sliderAlto.valueProperty().addListener(new ChangeListener() {
+                @Override
+                  public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                      sliderAltoValor.textProperty().setValue(
+                              String.valueOf((int) sliderAlto.getValue()));
+                              sliderAlto.setValue(sliderAlto.getValue());
+                  }
+              });
+              buttonMosaico.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent t) {
+                  iv2.setImage(SwingFXUtils.toFXImage(f.mosaico((int)sliderAncho.getValue(),(int)sliderAlto.getValue(),ruta), null));
+                }
+              });
+            }catch(Exception E){
+
+            }
+
+
           }
         });
 
@@ -170,11 +266,13 @@ public class Interfaz extends Application {
         iv2.setSmooth(true);
         iv2.setCache(true);
 
-        VBox rootBox = new VBox();
-        rootBox.getChildren().addAll(abrirImg, filtrosBtn, iv1, iv2);
-
-        Scene scene = new Scene(rootBox, 500, 800);
-
+        GridPane gridpane = new GridPane();
+        GridPane.setConstraints(abrirImg, 1,1);
+        GridPane.setConstraints(filtrosBtn, 2,1);
+        GridPane.setConstraints(iv1, 1,2);
+        GridPane.setConstraints(iv2, 2,2);
+        gridpane.getChildren().addAll(abrirImg, filtrosBtn,iv1,iv2);
+        Scene scene = new Scene(gridpane, 1000, 700);
         primaryStage.setTitle("Filtros RR");
         primaryStage.setScene(scene);
         primaryStage.show();
