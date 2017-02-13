@@ -94,6 +94,39 @@ public class Filtros{
      }
      return null;
    }
+   /**
+    * Transformar imagen dejando solo un componente
+    */
+    public BufferedImage soloUnComponente(Boolean r, Boolean g, Boolean b, String ruta){
+      try{
+        File input = new File(ruta);
+        BufferedImage img = ImageIO.read(input);
+        int ancho = img.getWidth();
+        int alto = img.getHeight();
+        BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+        for(int i = 0; i<ancho; i++){
+          for(int j = 0; j<alto; j++){
+            Color c = new Color(img.getRGB(i, j));
+            int red = c.getRed();
+            int green = c.getGreen();
+            int blue = c.getBlue();
+            if(r&&!g&&!b)
+            c = new Color(red,0,0);
+            else if(!r&&g&&!b)
+            c = new Color(0,green,0);
+            else if(!r&&!g&&b)
+            c = new Color(0,0,blue);
+            else
+            c = new Color(red,green,blue);
+            bufferedImage.setRGB(i,j,c.getRGB());
+          }
+        }
+        return bufferedImage;
+      }catch (Exception e) {
+
+      }
+      return null;
+    }
   /**
   * Transformar imagen a tonos de gris dividiendo entre tres
   */

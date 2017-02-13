@@ -52,6 +52,9 @@ public class Interfaz extends Application {
         MenuItem f2_1 = new MenuItem("2.1 - Solo Rojo");
         MenuItem f2_2 = new MenuItem("2.2 - Solo Verde");
         MenuItem f2_3 = new MenuItem("2.3 - Solo Azul");
+        MenuItem f2_4 = new MenuItem("2.4 - Imagen Solo Rojo");
+        MenuItem f2_5 = new MenuItem("2.5 - Imagen Solo Verde");
+        MenuItem f2_6 = new MenuItem("2.6 - Imagen Solo Azul");
         MenuItem f3_1 = new MenuItem("3.1 - Aleatorio Sin Rojo");
         MenuItem f3_2 = new MenuItem("3.2 - Aleatorio Sin Verde");
         MenuItem f3_3 = new MenuItem("3.3 - Aleatorio Sin Azul");
@@ -68,7 +71,7 @@ public class Interfaz extends Application {
         MenuItem f8   = new MenuItem("8 - Brillo");
         MenuItem f9   = new MenuItem("9 - Mosaico");
         filtrosBtn.setText("Filtros");
-        filtrosBtn.getItems().addAll(f1,f2_1,f2_2,f2_3,f3_1,f3_2,f3_3,f3_4,f3_5,f3_6,f4_1,f4_2,
+        filtrosBtn.getItems().addAll(f1,f2_1,f2_2,f2_3,f2_4,f2_5,f2_6,f3_1,f3_2,f3_3,f3_4,f3_5,f3_6,f4_1,f4_2,
                                     f5_1,f5_2,f5_3,f6,f7,f8,f9);
         f1.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
@@ -88,6 +91,21 @@ public class Interfaz extends Application {
         f2_3.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
             iv2.setImage(SwingFXUtils.toFXImage(f.unColor(0,0,255,900,800), null));
+          }
+        });
+        f2_4.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            iv2.setImage(SwingFXUtils.toFXImage(f.soloUnComponente(true,false,false,ruta), null));
+          }
+        });
+        f2_5.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            iv2.setImage(SwingFXUtils.toFXImage(f.soloUnComponente(false,true,false,ruta), null));
+          }
+        });
+        f2_6.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            iv2.setImage(SwingFXUtils.toFXImage(f.soloUnComponente(false,false,true,ruta), null));
           }
         });
         f3_1.setOnAction(new EventHandler<ActionEvent>() {
