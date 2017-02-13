@@ -154,6 +154,33 @@ public class Filtros{
      }
      return null;
    }
+   /**
+   * Transformar imagen a tonos de gris con la formula 0.21 R + 0.72 G + 0.07 B.
+   */
+   public BufferedImage escalaDeGrisesC(String ruta){
+     try{
+       File input = new File(ruta);
+       BufferedImage img = ImageIO.read(input);
+       int ancho = img.getWidth();
+       int alto = img.getHeight();
+       BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+       for(int i = 0; i<ancho; i++){
+         for(int j = 0; j<alto; j++){
+           Color c = new Color(img.getRGB(i, j));
+           int red = (int)(0.21 * c.getRed());
+           int green = (int)(0.72  * c.getGreen());
+           int blue = (int)(0.07 * c.getBlue());
+           int total = red+green+blue;
+           c = new Color(total,total,total);
+           bufferedImage.setRGB(i,j,c.getRGB());
+         }
+       }
+       return bufferedImage;
+     }catch (Exception e) {
+
+     }
+     return null;
+   }
   /**
   * Alto contraste
   */

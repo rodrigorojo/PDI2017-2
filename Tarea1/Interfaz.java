@@ -59,13 +59,12 @@ public class Interfaz extends Application {
         MenuItem f3_5 = new MenuItem("3.5 - Imagen Sin Verde");
         MenuItem f3_6 = new MenuItem("3.6 - Imagen Sin Azul");
         MenuItem f4_1 = new MenuItem("4.1 - Tonos de gris (Suma/3)");
-        MenuItem f4_2 = new MenuItem("4.2 - Tonos de gris (Formula FALTA)");
+        MenuItem f4_2 = new MenuItem("4.2 - Tonos de gris (Fórmula)");
         MenuItem f5_1 = new MenuItem("5.1 - Tonos de gris (Sin Rojo)");
         MenuItem f5_2 = new MenuItem("5.2 - Tonos de gris (Sin Verde)");
         MenuItem f5_3 = new MenuItem("5.3 - Tonos de gris (Sin Azul)");
         MenuItem f6   = new MenuItem("6 - Alto Contraste");
         MenuItem f7   = new MenuItem("7 - Inverso");
-        //Falta Barra para brillo y mosaico
         MenuItem f8   = new MenuItem("8 - Brillo");
         MenuItem f9   = new MenuItem("9 - Mosaico");
         filtrosBtn.setText("Filtros");
@@ -128,8 +127,7 @@ public class Interfaz extends Application {
         });
         f4_2.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            System.out.println("LOL");
-            //iv2.setImage(SwingFXUtils.toFXImage(, null));
+            iv2.setImage(SwingFXUtils.toFXImage(f.escalaDeGrisesC(ruta), null));
           }
         });
         f5_1.setOnAction(new EventHandler<ActionEvent>() {
@@ -175,16 +173,16 @@ public class Interfaz extends Application {
             gridpaneBrillo.setConstraints(buttonBrillo, 2,5);
             gridpaneBrillo.getChildren().addAll(labelBrillo,sliderBrillo,sliderBrilloValor,buttonBrillo);
             Scene sceneBrillo = new Scene(gridpaneBrillo, 470, 70);
-            stageBrillo.setTitle("Ajsutar Brillo");
+            stageBrillo.setTitle("Ajustar Brillo");
             stageBrillo.setScene(sceneBrillo);
             stageBrillo.show();
             sliderBrillo.valueProperty().addListener(new ChangeListener() {
-              @Override
-                public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                    sliderBrilloValor.textProperty().setValue(
-                            String.valueOf((int) sliderBrillo.getValue()));
-                            sliderBrillo.setValue(sliderBrillo.getValue());
-                }
+            @Override
+              public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                  sliderBrilloValor.textProperty().setValue(
+                          String.valueOf((int) sliderBrillo.getValue()));
+                          sliderBrillo.setValue(sliderBrillo.getValue());
+              }
             });
             buttonBrillo.setOnAction(new EventHandler<ActionEvent>() {
               public void handle(ActionEvent t) {
@@ -272,7 +270,7 @@ public class Interfaz extends Application {
         GridPane.setConstraints(iv1, 1,2);
         GridPane.setConstraints(iv2, 2,2);
         gridpane.getChildren().addAll(abrirImg, filtrosBtn,iv1,iv2);
-        Scene scene = new Scene(gridpane, 1000, 700);
+        Scene scene = new Scene(gridpane, 1000, 693);
         primaryStage.setTitle("Filtros RR");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -304,7 +302,6 @@ public class Interfaz extends Application {
 
 
         } catch (IOException ex) {
-            //Logger.getLogger(JavaFXPixel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
