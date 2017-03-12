@@ -9,24 +9,34 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.awt.Font;
 /** Filtros del 1 -6 **/
 public class Filtros{
   /**
    * Imagen con valores al azar RGB.
    */
-   public BufferedImage randomRGB(int ancho, int alto){
-     Random rndR = new Random();
-     Random rndG = new Random();
-     Random rndB = new Random();
-     BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
-     for(int i = 0; i<ancho; i++){
-       for(int j = 0; j<alto; j++){
-         Color c = new Color(rndR.nextInt(255),rndG.nextInt(255),rndB.nextInt(255));
-         bufferedImage.setRGB(i,j,c.getRGB());
-       }
+  public BufferedImage abreImagen(String ruta){
+    try{
+     File input = new File(ruta);
+     BufferedImage img = ImageIO.read(input);
+     return img;
+    }catch (Exception e) {
+    }
+    return null;
+  }
+  public BufferedImage randomRGB(int ancho, int alto){
+   Random rndR = new Random();
+   Random rndG = new Random();
+   Random rndB = new Random();
+   BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+   for(int i = 0; i<ancho; i++){
+     for(int j = 0; j<alto; j++){
+       Color c = new Color(rndR.nextInt(255),rndG.nextInt(255),rndB.nextInt(255));
+       bufferedImage.setRGB(i,j,c.getRGB());
      }
-     return bufferedImage;
    }
+   return bufferedImage;
+  }
    /**
     * Imagen con un solo color RBG.
     */
@@ -67,10 +77,8 @@ public class Filtros{
   /**
    * Transformar imagen dejando un componente en cero
    */
-   public BufferedImage sinUnComponente(Boolean r, Boolean g, Boolean b, String ruta){
+   public BufferedImage sinUnComponente(Boolean r, Boolean g, Boolean b, BufferedImage img){
      try{
-       File input = new File(ruta);
-       BufferedImage img = ImageIO.read(input);
        int ancho = img.getWidth();
        int alto = img.getHeight();
        BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -100,10 +108,8 @@ public class Filtros{
    /**
     * Transformar imagen dejando solo un componente
     */
-    public BufferedImage soloUnComponente(Boolean r, Boolean g, Boolean b, String ruta){
+    public BufferedImage soloUnComponente(Boolean r, Boolean g, Boolean b, BufferedImage img){
       try{
-        File input = new File(ruta);
-        BufferedImage img = ImageIO.read(input);
         int ancho = img.getWidth();
         int alto = img.getHeight();
         BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -133,10 +139,8 @@ public class Filtros{
   /**
   * Transformar imagen a tonos de gris dividiendo entre tres
   */
-  public BufferedImage escalaDeGrisesA(String ruta){
+  public BufferedImage escalaDeGrisesA(BufferedImage img){
     try{
-      File input = new File(ruta);
-      BufferedImage img = ImageIO.read(input);
       int ancho = img.getWidth();
       int alto = img.getHeight();
       BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -160,10 +164,8 @@ public class Filtros{
   /**
    * Transformar imagen a tonos de gris con (r,r,r),(g,g,g) o (b,b,b)
    */
-   public BufferedImage escalaDeGrisesB(Boolean r, Boolean g, Boolean b,String ruta){
+   public BufferedImage escalaDeGrisesB(Boolean r, Boolean g, Boolean b,BufferedImage img){
      try{
-       File input = new File(ruta);
-       BufferedImage img = ImageIO.read(input);
        int ancho = img.getWidth();
        int alto = img.getHeight();
        BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -193,10 +195,8 @@ public class Filtros{
    /**
    * Transformar imagen a tonos de gris con la formula 0.21 R + 0.72 G + 0.07 B.
    */
-   public BufferedImage escalaDeGrisesC(String ruta){
+   public BufferedImage escalaDeGrisesC(BufferedImage img){
      try{
-       File input = new File(ruta);
-       BufferedImage img = ImageIO.read(input);
        int ancho = img.getWidth();
        int alto = img.getHeight();
        BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -220,10 +220,8 @@ public class Filtros{
   /**
   * Alto contraste
   */
-  public BufferedImage altoContraste(String ruta){
+  public BufferedImage altoContraste(BufferedImage img){
     try{
-      File input = new File(ruta);
-      BufferedImage img = ImageIO.read(input);
       int ancho = img.getWidth();
       int alto = img.getHeight();
       BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -250,10 +248,8 @@ public class Filtros{
   /**
   * Inverso
   */
-  public BufferedImage inverso(String ruta){
+  public BufferedImage inverso(BufferedImage img){
    try{
-     File input = new File(ruta);
-     BufferedImage img = ImageIO.read(input);
      int ancho = img.getWidth();
      int alto = img.getHeight();
      BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -280,10 +276,8 @@ public class Filtros{
   /**
   * Brillo
   */
-  public BufferedImage brillo(int brillo, String ruta){
+  public BufferedImage brillo(int brillo, BufferedImage img){
    try{
-     File input = new File(ruta);
-     BufferedImage img = ImageIO.read(input);
      int ancho = img.getWidth();
      int alto = img.getHeight();
      BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -315,10 +309,8 @@ public class Filtros{
   /**
   * Mosaico
   */
-  public BufferedImage mosaico(int w, int h, String ruta){
+  public BufferedImage mosaico(int w, int h, BufferedImage img){
    try{
-     File input = new File(ruta);
-     BufferedImage img = ImageIO.read(input);
      int ancho = img.getWidth();
      int alto = img.getHeight();
      BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -376,15 +368,15 @@ public class Filtros{
       return tamCuad;
   }
 
-  public BufferedImage sepia(int x, String ruta){
+  public BufferedImage sepia(int x, BufferedImage img){
     try{
-      BufferedImage img = escalaDeGrisesC(ruta);
-      int ancho = img.getWidth();
-      int alto = img.getHeight();
+      BufferedImage imgG = escalaDeGrisesC(img);
+      int ancho = imgG.getWidth();
+      int alto = imgG.getHeight();
       BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
       for(int i = 0; i<ancho; i++){
         for(int j = 0; j<alto; j++){
-          Color c = new Color(img.getRGB(i, j));
+          Color c = new Color(imgG.getRGB(i, j));
           int red = rangoCorrecto(c.getRed()+(x*2));
           int green = rangoCorrecto(c.getGreen()+x);
           int blue = rangoCorrecto(c.getBlue());
@@ -408,15 +400,15 @@ public class Filtros{
   /**
   * Mosaico
   */
-  public BufferedImage blurSuave(String ruta){
+  public BufferedImage blurSuave(BufferedImage img){
     double [][] matriz = {{0.0,0.2,0.0},
                           {0.2,0.2,0.2},
                           {0.0,0.2,0.0}};
     double factor = 1.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage blurMedio(String ruta){
+  public BufferedImage blurMedio(BufferedImage img){
     double [][] matriz = {{0,0,1,0,0},
                           {0,1,1,1,0},
                           {1,1,1,1,1},
@@ -424,9 +416,9 @@ public class Filtros{
                           {0,0,1,0,0}};
     double factor = 1.0/13.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage motionBlur(String ruta){
+  public BufferedImage motionBlur(BufferedImage img){
     double [][] matriz = {{1,0,0,0,0,0,0,0,0},
                           {0,1,0,0,0,0,0,0,0},
                           {0,0,1,0,0,0,0,0,0},
@@ -438,9 +430,9 @@ public class Filtros{
                           {0,0,0,0,0,0,0,0,1}};
     double factor = 1.0/9.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,0.11,0);
+    return convolucionAux(img, matriz,0.11,0);
   }
-  public BufferedImage encuentraBordesA(String ruta){
+  public BufferedImage encuentraBordesA(BufferedImage img){
     double [][] matriz ={{0.0,0.0, -1.0,0.0,0.0},
                          {0.0,0.0, -1.0,0.0,0.0},
                          {0.0,0.0,  2.0,0.0,0.0},
@@ -448,9 +440,9 @@ public class Filtros{
                          {0.0,0.0,  0.0,0.0,0.0}};
     double factor = 1.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage encuentraBordesB(String ruta){
+  public BufferedImage encuentraBordesB(BufferedImage img){
     double [][] matriz ={{0,  0, -1,  0,  0},
                           {0,  0, -1,  0,  0},
                           {0,  0,  4,  0,  0},
@@ -458,9 +450,9 @@ public class Filtros{
                           {0,  0, -1,  0,  0}};
     double factor = 1.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage encuentraBordesC(String ruta){
+  public BufferedImage encuentraBordesC(BufferedImage img){
     double [][] matriz ={{-1,  0,  0,  0,  0},
                           {0, -2,  0,  0,  0},
                           {0,  0,  6,  0,  0},
@@ -468,25 +460,25 @@ public class Filtros{
                           {0,  0,  0,  0, -1}};
     double factor = 1.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage encuentraBordesD(String ruta){
+  public BufferedImage encuentraBordesD(BufferedImage img){
     double [][] matriz ={{-1, -1, -1},
                           {-1,  8, -1},
                           {-1, -1, -1}};
     double factor = 1.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage sharpenA(String ruta){
+  public BufferedImage sharpenA(BufferedImage img){
     double [][] matriz ={{-1, -1, -1},
                           {-1,  9, -1},
                           {-1, -1, -1}};
     double factor = 1.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage sharpenB(String ruta){
+  public BufferedImage sharpenB(BufferedImage img){
     double [][] matriz ={{-1, -1, -1, -1, -1},
                           {-1,  2,  2,  2, -1},
                           {-1,  2,  8,  2, -1},
@@ -494,25 +486,25 @@ public class Filtros{
                           {-1, -1, -1, -1, -1}};
     double factor = 1.0 / 8.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage sharpenC(String ruta){
+  public BufferedImage sharpenC(BufferedImage img){
     double [][] matriz ={{1, 1, 1},
                           {1,  -7, 1},
                           {1, 1, 1}};
     double factor = 1.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage embossA(String ruta){
+  public BufferedImage embossA(BufferedImage img){
     double [][] matriz ={ {-1,-1, 0},
                           {-1, 0, 1},
                           { 0, 1, 1}};
     double factor = 1.0;
     double bias = 128.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage embossB(String ruta){
+  public BufferedImage embossB(BufferedImage img){
     double [][] matriz ={ {-1, -1, -1, -1,  0},
                           {-1, -1, -1,  0,  1},
                           {-1, -1,  0,  1,  1},
@@ -521,9 +513,9 @@ public class Filtros{
 
     double factor = 1.0;
     double bias = 128.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
-  public BufferedImage promedio(String ruta){
+  public BufferedImage promedio(BufferedImage img){
     double [][] matriz ={ {1, 1, 1, 1, 1, 1, 1, 1, 1},
                           {1, 1, 1, 1, 1, 1, 1, 1, 1},
                           {1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -536,13 +528,11 @@ public class Filtros{
 
     double factor = 1.0/81.0;
     double bias = 0.0;
-    return convolucionAux(ruta, matriz,factor,bias);
+    return convolucionAux(img, matriz,factor,bias);
   }
 
-  public BufferedImage convolucionAux(String ruta, double[][] matriz, double factor, double bias){
+  public BufferedImage convolucionAux(BufferedImage img, double[][] matriz, double factor, double bias){
     try{
-        File input = new File(ruta);
-        BufferedImage img = ImageIO.read(input);
         int ancho = img.getWidth();
         int alto = img.getHeight();
         BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -584,10 +574,8 @@ public class Filtros{
     }
     return null;
     }
-    public BufferedImage mediana(int t, String ruta){
+    public BufferedImage mediana(int t, BufferedImage img){
       try{
-          File input = new File(ruta);
-          BufferedImage img = ImageIO.read(input);
           int ancho = img.getWidth();
           int alto = img.getHeight();
           BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
@@ -627,6 +615,205 @@ public class Filtros{
     Collections.sort(lst);
     int s = lst.size();
     return lst.get(lst.size()/2);
+  }
+  public BufferedImage soloConM(BufferedImage img){
+    return conUnaLetra("M", img);
+  }
+  public BufferedImage soloConArroba(BufferedImage img){
+    return conUnaLetra("@", img);
+  }
+  public BufferedImage grisesConM(BufferedImage img){
+    return conUnaLetra("M", escalaDeGrisesC(img));
+  }
+  public BufferedImage grisesConArroba(BufferedImage img){
+    return conUnaLetra("@", escalaDeGrisesC(img));
+  }
+  public BufferedImage conUnaLetra(String letra,BufferedImage img){
+    int tamMosaico = 10;
+    BufferedImage imgM = mosaico(tamMosaico, tamMosaico, img);
+    int ancho = imgM.getWidth();
+    int alto = imgM.getHeight();
+    BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+    Graphics graphics = bufferedImage.getGraphics();
+    graphics.setColor(Color.WHITE);
+    graphics.fillRect(0, 0, ancho, alto);
+    for(int i = 0; i<ancho; i+=tamMosaico){
+      for(int j = 0; j<alto; j+=tamMosaico){
+        Color c = new Color(imgM.getRGB(i,j));
+        graphics.setColor(c);
+        graphics.setFont(new Font("DIALOG", Font.PLAIN, tamMosaico));
+        graphics.drawString(letra, i, j);
+      }
+    }
+    return bufferedImage;
+  }
+  public BufferedImage cadenaSinColor(BufferedImage img){
+    return cadenaFija(img, false);
+  }
+  public BufferedImage cadenaConColor(BufferedImage img){
+    return cadenaFija(img, true);
+  }
+  public BufferedImage cadenaEnGrises(BufferedImage img){
+    return cadenaFija(escalaDeGrisesC(img), true);
+  }
+  public BufferedImage cadenaFija(BufferedImage img, Boolean usarColor){
+    int tamMosaico = 10;
+    BufferedImage imgM = mosaico(tamMosaico, tamMosaico, img);
+    int ancho = imgM.getWidth();
+    int alto = imgM.getHeight();
+    BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+    Graphics graphics = bufferedImage.getGraphics();
+    graphics.setColor(Color.WHITE);
+    graphics.fillRect(0, 0, ancho, alto);
+    for(int i = 0; i<ancho; i+=tamMosaico){
+      for(int j = 0; j<alto; j+=tamMosaico){
+        Color c = new Color(imgM.getRGB(i,j));
+        if(usarColor)
+          graphics.setColor(c);
+        else
+          graphics.setColor(Color.BLACK);
+        graphics.setFont(new Font("DIALOG", Font.PLAIN, tamMosaico));
+        graphics.drawString(letraCorrespondiente(c.getRed(),c.getGreen(),c.getBlue()), i, j);
+      }
+    }
+    return bufferedImage;
+  }
+  public String letraCorrespondiente(int r, int g, int b){
+    int prom = (r+g+b)/3;
+    if (prom >= 0 && prom < 16){
+        return "M";
+    } else if(prom >= 16 && prom < 32){
+        return "N";
+    }else if(prom >= 32 && prom < 48){
+        return "H";
+    }else if(prom >= 48 && prom < 64){
+        return "#";
+    }else if(prom >= 64 && prom < 80){
+        return "Q";
+    }else if(prom >= 80 && prom < 96){
+        return "U";
+    }else if(prom >= 96 && prom < 112){
+        return "A";
+    }else if(prom >= 112 && prom < 128){
+        return "D";
+    }else if(prom >= 128 && prom < 144){
+        return "O";
+    }else if(prom >= 144 && prom < 160){
+        return "Y";
+    }else if(prom >= 160 && prom < 176){
+        return "2";
+    }else if(prom >= 176 && prom < 192){
+        return "$";
+    }else if(prom >= 192 && prom < 208){
+        return "%";
+    }else if(prom >= 208 && prom < 224){
+        return "+";
+    }else if(prom >= 224 && prom < 240){
+        return "_";
+    }else if(prom >= 240 && prom < 256){
+        return " ";
+    }
+    return " ";
+  }
+  public BufferedImage conTexto(BufferedImage img, String texto){
+    int tamMosaico = 10;
+    int tamTexto = texto.length();
+    BufferedImage imgM = mosaico(tamMosaico, tamMosaico, img);
+    int ancho = imgM.getWidth();
+    int alto = imgM.getHeight();
+    BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+    Graphics graphics = bufferedImage.getGraphics();
+    graphics.setColor(Color.WHITE);
+    graphics.fillRect(0, 0, ancho, alto);
+    int cont = 0;
+    for(int i = 0; i<ancho; i+=tamMosaico){
+      for(int j = 0; j<alto; j+=tamMosaico){
+        Color c = new Color(imgM.getRGB(i,j));
+        graphics.setColor(c);
+        graphics.setFont(new Font("DIALOG", Font.PLAIN, tamMosaico));
+        graphics.drawString(texto.charAt(cont % tamTexto)+"", i, j);
+        cont++;
+      }
+      cont = 0;
+    }
+    return bufferedImage;
+  }
+  public BufferedImage naipes(BufferedImage img){
+    int tamMosaico = 10;
+    BufferedImage imgM = mosaico(tamMosaico, tamMosaico, img);
+    int ancho = imgM.getWidth();
+    int alto = imgM.getHeight();
+    BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+    Graphics graphics = bufferedImage.getGraphics();
+    graphics.setColor(Color.WHITE);
+    graphics.fillRect(0, 0, ancho, alto);
+    int cont = 0;
+    for(int i = 0; i<ancho; i+=tamMosaico){
+      for(int j = 0; j<alto; j+=tamMosaico){
+        Color c = new Color(imgM.getRGB(i,j));
+        graphics.setColor(c);
+        Font font;
+        try{
+          font = Font.createFont(Font.PLAIN, new File("Playcrds.TTF"));
+          font.deriveFont(10f);
+          graphics.setFont(font);
+          graphics.drawString(dominoCorrespondiente(c.getRed(),c.getGreen(),c.getBlue()), i, j);
+          cont++;
+        }catch(Exception e){
+          System.out.println("Fuente no encontrada");
+        }
+      }
+      cont = 0;
+    }
+    return bufferedImage;
+  }
+  public BufferedImage domino(BufferedImage img){
+    int tamMosaico = 10;
+    BufferedImage imgM = mosaico(tamMosaico, tamMosaico, img);
+    int ancho = imgM.getWidth();
+    int alto = imgM.getHeight();
+    BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+    Graphics graphics = bufferedImage.getGraphics();
+    graphics.setColor(Color.WHITE);
+    graphics.fillRect(0, 0, ancho, alto);
+    int cont = 0;
+    for(int i = 0; i<ancho; i+=tamMosaico){
+      for(int j = 0; j<alto; j+=tamMosaico){
+        Color c = new Color(imgM.getRGB(i,j));
+        graphics.setColor(c);
+        Font font;
+        try{
+          font = Font.createFont(Font.PLAIN, new File("lasvbld_.TTF"));
+          font.deriveFont(10f);
+          graphics.setFont(font);
+          graphics.drawString(dominoCorrespondiente(c.getRed(),c.getGreen(),c.getBlue()), i, j);
+          cont++;
+        }catch(Exception e){
+          System.out.println("Fuente no encontrada");
+        }
+      }
+      cont = 0;
+    }
+    return bufferedImage;
+  }
+  public String dominoCorrespondiente(int r, int g, int b){
+    int prom = (r+g+b)/3;
+    if (prom >= 0 && prom < 37){
+        return "6";
+    } else if(prom >= 37 && prom < 74){
+        return "5";
+    }else if(prom >= 74 && prom < 111){
+        return "4";
+    }else if(prom >= 111 && prom < 148){
+        return "3";
+    }else if(prom >= 148 && prom < 185){
+        return "2";
+    }else if(prom >= 185 && prom < 222){
+        return "1";
+    }else if(prom >= 222 && prom < 256){
+        return "0";
+    }
+    return "";
   }
   /**
   * Crear un archivo .jpg
