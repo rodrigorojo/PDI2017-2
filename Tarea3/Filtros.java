@@ -751,21 +751,42 @@ public class Filtros{
     for(int i = 0; i<ancho; i+=tamMosaico){
       for(int j = 0; j<alto; j+=tamMosaico){
         Color c = new Color(imgM.getRGB(i,j));
-        graphics.setColor(c);
-        Font font;
-        try{
-          font = Font.createFont(Font.PLAIN, new File("Playcrds.TTF"));
-          font.deriveFont(10f);
-          graphics.setFont(font);
-          graphics.drawString(dominoCorrespondiente(c.getRed(),c.getGreen(),c.getBlue()), i, j);
-          cont++;
-        }catch(Exception e){
-          System.out.println("Fuente no encontrada");
-        }
+        graphics.setColor(Color.BLACK);
+        graphics.setFont(new Font("PlayingCards", Font.PLAIN, tamMosaico));
+        graphics.drawString(naipeCorrespondiente(c.getRed(),c.getGreen(),c.getBlue()), i, j);
+        cont++;
+
       }
       cont = 0;
     }
     return bufferedImage;
+  }
+  public String naipeCorrespondiente(int r, int g, int b){
+    int prom = (r+g+b)/3;
+    if (prom >= 0 && prom < 23){
+       return "Z";
+    } else if(prom >= 23 && prom < 46){
+       return "W";
+    }else if(prom >= 46 && prom < 69){
+       return "V";
+    }else if(prom >= 69 && prom < 92){
+       return "U";
+    }else if(prom >= 92 && prom < 115){
+       return "T";
+    }else if(prom >= 115 && prom < 138){
+       return "S";
+    }else if(prom >= 138 && prom < 161){
+       return "R";
+    }else if(prom >= 161 && prom < 184){
+       return "Q";
+    }else if(prom >= 184 && prom < 207){
+       return "P";
+    }else if(prom >= 207 && prom < 230){
+       return "O";
+    }else if(prom >= 230 && prom < 256){
+       return "N";
+    }
+    return "";
   }
   public BufferedImage domino(BufferedImage img){
     int tamMosaico = 10;
@@ -781,16 +802,9 @@ public class Filtros{
       for(int j = 0; j<alto; j+=tamMosaico){
         Color c = new Color(imgM.getRGB(i,j));
         graphics.setColor(c);
-        Font font;
-        try{
-          font = Font.createFont(Font.PLAIN, new File("lasvbld_.TTF"));
-          font.deriveFont(10f);
-          graphics.setFont(font);
-          graphics.drawString(dominoCorrespondiente(c.getRed(),c.getGreen(),c.getBlue()), i, j);
-          cont++;
-        }catch(Exception e){
-          System.out.println("Fuente no encontrada");
-        }
+        graphics.setFont(new Font("Las Vegas Black Dominoes", Font.PLAIN, tamMosaico));
+        graphics.drawString(dominoCorrespondiente(c.getRed(),c.getGreen(),c.getBlue()), i, j);
+        cont++;
       }
       cont = 0;
     }
