@@ -606,10 +606,8 @@ public class Interfaz extends Application {
             });
             buttonFusionar.setOnAction(new EventHandler<ActionEvent>() {
               public void handle(ActionEvent t) {
-
                 descargarImg = f.fusion(f.abreImagen(ruta),f.abreImagen(ruta2), (int)sliderFusion.getValue(), 100-(int)sliderFusion.getValue());
                 iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
-                f.creaImagen(descargarImg,"IMG-");
               }
             });
             buttonAbrirImg2.setOnAction(new EventHandler<ActionEvent>() {
