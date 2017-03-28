@@ -907,7 +907,7 @@ public class Filtros{
   	g.dispose();
     return resizedImage;
   }
-  //-125 hasta 125
+  //-imgReducida hasta 125
   private void distintosGrises(BufferedImage img, int alpha, Map<Integer,BufferedImage> imagenes){
     int ancho = img.getWidth();
     int alto = img.getHeight();
@@ -932,34 +932,25 @@ public class Filtros{
       }
     }
     int promedio = totalR/(ancho*alto);
-    //System.out.println("Promedio: "+promedio);
     imagenes.put(promedio, bufferedImage);
-    //return bufferedImage;
   }
   public BufferedImage recursivaColor(BufferedImage img){
     return recursivaC(img);
   }
   private BufferedImage recursivaC(BufferedImage img){
     Map<Integer,BufferedImage> imagenes= new HashMap<Integer,BufferedImage>();
-    BufferedImage imgGrisReducida = reducirImagen(img, 0.1);
-    BufferedImage mosaicos1 = reducirImagen(imgGrisReducida,0.1);
+    BufferedImage imgReducida = reducirImagen(img, 0.1);
+    BufferedImage mosaicos1 = reducirImagen(imgReducida,0.1);
     int anchoRealMosaico = rightDivPlus(mosaicos1.getWidth(),img.getWidth());
     int altoRealMosaico = rightDivPlus(mosaicos1.getHeight(),img.getHeight());
-    BufferedImage mosaicos = reducirImagen(imgGrisReducida,anchoRealMosaico,altoRealMosaico);
+    BufferedImage mosaicos = reducirImagen(imgReducida,anchoRealMosaico,altoRealMosaico);
     BufferedImage resultado = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
-
     BufferedImage imgReducidaMosaico = mosaico(mosaicos.getWidth(),mosaicos.getHeight(),img);
-
     System.out.println(anchoRealMosaico+" , "+altoRealMosaico);
-
     for(int i = 0; i<img.getWidth(); i+=anchoRealMosaico){
       for(int j = 0; j<img.getHeight(); j+=altoRealMosaico){
         Color c = new Color(imgReducidaMosaico.getRGB(i,j));
-        //BufferedImage imagenEnMosaico = imagenes.get(buscaValor(valoresRGB,c.getRed()));
-        BufferedImage imagenEnMosaico = null;//distintosGrises(mosaicos,c.getRed());
-        //System.out.println("RGB( " + c.getRed()+" )");
-        //System.out.println("imagen correspondiente: "+buscaValor(valoresRGB,c.getRed()));
-
+        BufferedImage imagenEnMosaico = mascaraColorFusion(mosaicos,c.getRed(),c.getGreen(),c.getBlue());
         for (int k = 0;k< imagenEnMosaico.getWidth();k++) {
           for (int l = 0;l<imagenEnMosaico.getHeight();l++) {
               Color c1 = new Color(imagenEnMosaico.getRGB(k,l));
@@ -972,27 +963,37 @@ public class Filtros{
   }
   private BufferedImage mascaraColor(BufferedImage img, int red, int green, int blue){
     int valor = (blue*255) + (green*16) + red;
-    //int valors = Integer.parseInt(valor, 16);
-    //System.out.println(valors);
     BufferedImage resultado = new  BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
     for(int i = 0; i<img.getWidth(); i++){
       for(int j = 0; j<img.getHeight(); j++){
         Color c = new Color(img.getRGB(i,j));
-        int r = c.getRed()&valor;
-        int g = c.getGreen()&valor;
-        int b = c.getBlue()&valor;
-        int total = (r+g+b)/3;
-        int res = total & valor;
-        c = new Color(r,g,b);
+        int res = c.getRGB() & valor;
+        c = new Color(res);
         resultado.setRGB(i,j,c.getRGB());
       }
     }
     return resultado;
-
   }
-
-
-
+  private BufferedImage mascaraColorFusion(BufferedImage img, int red, int green, int blue) {
+    int ancho = img.getWidth();
+    int alto = img.getHeight();
+		BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+		for(int i = 0; i<ancho; i++) {
+			for(int j = 0; j<alto; j++) {
+				Color color1 = new Color(img.getRGB(i, j));
+				double r = (double) color1.getRed();
+				double g = (double) color1.getGreen();
+		    double b = (double) color1.getBlue();
+		    double p1 = (double) 35;
+		    double p2 = (double) 65;
+		    int redN = (int)Math.floor((r*(p1/100)) + (red*(p2/100)));
+		    int greenN = (int)Math.floor((g*(p1/100)) + (green*(p2/100)));
+		    int blueN = (int)Math.floor((b*(p1/100)) + (blue*(p2/100)));
+		    bufferedImage.setRGB(i,j,new Color(redN,greenN,blueN).getRGB());
+			}
+		}
+		return bufferedImage;
+	}
 
   /**
   * Crear un archivo .jpg
