@@ -995,6 +995,36 @@ public class Filtros{
 		return bufferedImage;
 	}
 
+  public BufferedImage fusion(BufferedImage img1, BufferedImage img2, int porcentaje1, int porcentaje2){
+    int ancho = (img1.getWidth() <= img2.getWidth()) ? img1.getWidth() : img2.getWidth();
+    int alto = (img1.getHeight() <= img2.getHeight()) ? img1.getHeight() : img2.getHeight();
+		BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+		for(int i = 0; i<ancho; i++) {
+			for(int j = 0; j<alto; j++) {
+				Color color1 = (i < img1.getWidth() && j < img1.getHeight()) ? new Color(img1.getRGB(i, j)) : new Color(255,255,255);
+        Color color2 = (i < img2.getWidth() && j < img2.getHeight()) ? new Color(img2.getRGB(i, j)) : new Color(255,255,255);
+				double redImg1 = (double) color1.getRed();
+				double greenImg1 = (double) color1.getGreen();
+		    double blueImg1 = (double) color1.getBlue();
+        double redImg2 = (double) color2.getRed();
+				double greenImg2 = (double) color2.getGreen();
+		    double blueImg2 = (double) color2.getBlue();
+		    double p1 = (double) 35;
+		    double p2 = (double) 65;
+		    int redN = (int)Math.floor((redImg1*(p1/100)) + (redImg2*(p2/100)));
+		    int greenN = (int)Math.floor((greenImg1*(p1/100)) + (greenImg2*(p2/100)));
+		    int blueN = (int)Math.floor((blueImg1*(p1/100)) + (blueImg2*(p2/100)));
+		    bufferedImage.setRGB(i,j,new Color(redN,greenN,blueN).getRGB());
+			}
+		}
+		return bufferedImage;
+  }
+
+  public BufferedImage quitaMarcaDeAgua(BufferedImage img){
+    
+    return null;
+  }
+
   /**
   * Crear un archivo .jpg
   */

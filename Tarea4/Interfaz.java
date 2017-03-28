@@ -29,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.RowConstraints;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.TextField;
@@ -42,27 +43,11 @@ public class Interfaz extends Application {
     ImageView iv2;
     Filtros f = new Filtros();
     String ruta;
+    String ruta2 = "";
     BufferedImage descargarImg;
     int cuentaDescargas = 1;
     //TEmp
     Image image;
-    /*public void descargaImagen(Image img, String nombre){
-      //Image  img = new ImageIcon("test.png").getImage();
-
-      BufferedImage bufferedImage = new BufferedImage((int)img.getWidth(), (int)img.getHeight(),
-          BufferedImage.TYPE_INT_RGB);
-
-      Graphics g = bufferedImage.createGraphics();
-      g.drawImage(img, 0, 0, null);
-      g.dispose();
-      System.out.println("hola");
-      try{
-        ImageIO.write(bufferedImage, "jpg", new File(nombre+".jpg"));
-      }catch(Exception e){
-        System.out.println("No se pudo descargar la imagen");
-      }
-
-    }*/
 
     @Override
     public void start(Stage primaryStage) {
@@ -583,18 +568,78 @@ public class Interfaz extends Application {
         });
         frfm3.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            System.out.println("Hola");
-            //descargarImg = f.recursivaGrises(f.abreImagen(ruta));
-            //iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
+            Stage stageFusion = new Stage();
+            GridPane gridpaneFusion = new GridPane();
+            stageFusion.setMaxWidth(500);
+            stageFusion.setMinWidth(500);
+
+            ImageView ivimg2;
+            ivimg2 = new ImageView();
+            ivimg2.setFitWidth(500);
+            ivimg2.setPreserveRatio(true);
+            ivimg2.setSmooth(true);
+            ivimg2.setCache(true);
+
+            Slider sliderFusion = new Slider(0, 100, 50);
+            Label sliderFusionValor = new Label("50");
+
+            Button buttonFusionar = new Button("Fusionar");
+            Button buttonAbrirImg2 = new Button("Abrir imagen");
+            gridpaneFusion.setConstraints(buttonAbrirImg2, 1,1);
+            gridpaneFusion.setConstraints(ivimg2, 1,2);
+            gridpaneFusion.setConstraints(sliderFusion, 1,3);
+            gridpaneFusion.setConstraints(sliderFusionValor, 1,4,1,1,HPos.CENTER,VPos.CENTER);
+            gridpaneFusion.setConstraints(buttonFusionar, 1,4,1,1,HPos.RIGHT,VPos.CENTER);
+
+            gridpaneFusion.getChildren().addAll(buttonAbrirImg2,ivimg2,buttonFusionar,sliderFusion,sliderFusionValor);
+            Scene sceneTexto = new Scene(gridpaneFusion, 500, 740);
+            stageFusion.setTitle("Abir Segunda Imagen");
+            stageFusion.setScene(sceneTexto);
+            stageFusion.show();
+
+            sliderFusion.valueProperty().addListener(new ChangeListener() {
+            @Override
+              public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                  sliderFusionValor.textProperty().setValue(String.valueOf((int) sliderFusion.getValue()));
+                  sliderFusion.setValue(sliderFusion.getValue());
+              }
+            });
+            buttonFusionar.setOnAction(new EventHandler<ActionEvent>() {
+              public void handle(ActionEvent t) {
+
+                descargarImg = f.fusion(f.abreImagen(ruta),f.abreImagen(ruta2), (int)sliderFusion.getValue(), 100-(int)sliderFusion.getValue());
+                iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
+                f.creaImagen(descargarImg,"IMG-");
+              }
+            });
+            buttonAbrirImg2.setOnAction(new EventHandler<ActionEvent>() {
+              public void handle(ActionEvent t) {
+                FileChooser fileChooser2 = new FileChooser();
+                FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
+                FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
+                fileChooser2.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
+                File file2 = fileChooser2.showOpenDialog(null);
+                ruta2 = file2.getPath();
+                Image image2;
+                try {
+                    BufferedImage bufferedImage = ImageIO.read(file2);
+                    image2 = SwingFXUtils.toFXImage(bufferedImage, null);
+                    ivimg2.setImage(image2);
+                } catch (IOException ex) {
+                }
+
+              }
+            });
+
           }
         });
         frfm4.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            System.out.println("Hola");
-            //descargarImg = f.recursivaGrises(f.abreImagen(ruta));
-            //iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
+            descargarImg = f.quitaMarcaDeAgua(f.abreImagen(ruta));
+            iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
           }
         });
+
         /**************Recursivas, Fusion, Quitar Marca de Agua****************/
         /*****************************Descargar********************************/
         descargar.setOnAction(new EventHandler<ActionEvent>() {
