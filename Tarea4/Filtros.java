@@ -1021,8 +1021,55 @@ public class Filtros{
   }
 
   public BufferedImage quitaMarcaDeAgua(BufferedImage img){
-    
-    return null;
+    int ancho = img.getWidth();
+    int alto = img.getHeight();
+    BufferedImage ac = altoContraste(img);
+    BufferedImage inv = inverso(img);
+    BufferedImage mf = masFuerte(img,255);
+    BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+    for(int i = 0; i<ancho; i++) {
+			for(int j = 0; j<alto; j++) {
+        Color color1 = new Color(img.getRGB(i, j));
+        Color color2 = new Color(ac.getRGB(i, j));
+        Color color3 = new Color(inv.getRGB(i, j));
+        if((color2.getRed()==255 && color2.getGreen()==255 && color2.getBlue()==255)
+          &&(color3.getRed()==0 && color3.getGreen()==0 && color3.getBlue()==0)){
+          bufferedImage.setRGB(i,j,new Color(255,255,255).getRGB());
+        }else{
+          bufferedImage.setRGB(i,j,color1.getRGB());
+        }
+      }
+    }
+    return bufferedImage;
+  }
+  private BufferedImage masFuerte(BufferedImage img, int alpha){
+    int ancho = img.getWidth();
+    int alto = img.getHeight();
+    BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+    int cont = 0;
+    int totalR = 0;
+    int totalG = 0;
+    int totalB = 0;
+
+    for(int i = 0; i<ancho; i++){
+      for(int j = 0; j<alto; j++){
+        Color c = new Color(img.getRGB(i,j));
+        if(c.getRed()==255 && c.getGreen()== 255 && c.getBlue()== 255){
+          int red = rangoCorrecto(c.getRed()+alpha);
+          int green = rangoCorrecto(c.getGreen()+alpha);
+          int blue = rangoCorrecto(c.getBlue()+alpha);
+          totalR += red;
+          totalG += green;
+          totalB += blue;
+          c = new Color(red,green,blue);
+          bufferedImage.setRGB(i,j,c.getRGB());
+        }else{
+          bufferedImage.setRGB(i,j,c.getRGB());
+        }
+
+      }
+    }
+    return bufferedImage;
   }
 
   /**
