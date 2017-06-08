@@ -1,0 +1,8 @@
+/Users/rodrigorojo/Desktop/imagenes/10000 images/Images/Animals/P003A023.JPG --> 115 125 130
+/Users/rodrigorojo/Desktop/imagenes/10000 images/Images/Animals/P003A024.JPG --> 112 124 114
+/Users/rodrigorojo/Desktop/imagenes/10000 images/Images/Animals/P003A026.JPG --> 83 78 59
+/Users/rodrigorojo/Desktop/imagenes/10000 images/Images/Animals/P003A029.JPG --> 91 74 54
+/Users/rodrigorojo/Desktop/imagenes/10000 images/Images/Animals/P003A030.JPG --> 103 111 85
+/Users/rodrigorojo/Desktop/imagenes/10000 images/Images/Animals/P003A034.JPG --> 106 121 106
+/Users/rodrigorojo/Desktop/imagenes/10000 images/Images/Animals/P003A038.JPG --> 88 100 75
+/Users/rodrigorojo/Desktop/imagenes/10000 images/Images/Animals/P001B100.JPG --> 106 79 70
