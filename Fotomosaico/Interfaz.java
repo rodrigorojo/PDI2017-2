@@ -127,7 +127,7 @@ public class Interfaz extends Application {
       f3.setAccelerator(KeyCombination.keyCombination("Shortcut+3"));
       f3.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            descargarImg = f.fotomosaico(f.abreImagen(ruta),"RIMERSMA");
+            descargarImg = f.fotomosaico(f.abreImagen(ruta),"RIEMERSMA");
             iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
           }
       });

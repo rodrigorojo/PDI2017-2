@@ -136,7 +136,7 @@ public class Filtros{
           imgCorrespondiente = escogeImagenLineal(c.getRed(),c.getGreen(),c.getBlue());
         else if(forma.equals("EUCLIDIANA"))
           imgCorrespondiente = escogeImagenEuclidiana(c.getRed(),c.getGreen(),c.getBlue());
-        else if(forma.equals("RIMERSAMA"))
+        else if(forma.equals("RIEMERSMA"))
           imgCorrespondiente = escogeImagenRiemersma(c.getRed(),c.getGreen(),c.getBlue());
         else
           imgCorrespondiente = escogeImagenRestas(c.getRed(),c.getGreen(),c.getBlue());
