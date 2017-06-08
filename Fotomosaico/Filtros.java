@@ -121,7 +121,7 @@ public class Filtros{
     return prom;
   }
 
-  public BufferedImage fotomosaico(BufferedImage img){
+  public BufferedImage fotomosaico(BufferedImage img, String forma){
     int anchoRealMosaico = rightDivPlus(10,img.getWidth());
     int altoRealMosaico = rightDivPlus(10,img.getHeight());
     BufferedImage mosaicoPromedios = mosaico(anchoRealMosaico, altoRealMosaico, img);
@@ -131,7 +131,15 @@ public class Filtros{
     for(int i = 0; i<imgMosaico.getWidth(); i+=anchoRealMosaico){
       for(int j = 0; j<imgMosaico.getHeight(); j+=altoRealMosaico){
         Color c = new Color(imgMosaico.getRGB(i,j));
-        BufferedImage imgCorrespondiente = escogeImagenRiemersma(c.getRed(),c.getGreen(),c.getBlue());
+        BufferedImage imgCorrespondiente = null;
+        if(forma.equals("LINEAL"))
+          imgCorrespondiente = escogeImagenLineal(c.getRed(),c.getGreen(),c.getBlue());
+        else if(forma.equals("EUCLIDIANA"))
+          imgCorrespondiente = escogeImagenEuclidiana(c.getRed(),c.getGreen(),c.getBlue());
+        else if(forma.equals("RIMERSAMA"))
+          imgCorrespondiente = escogeImagenRiemersma(c.getRed(),c.getGreen(),c.getBlue());
+        else
+          imgCorrespondiente = escogeImagenRestas(c.getRed(),c.getGreen(),c.getBlue());
         BufferedImage imgReducida = reducirImagen(imgCorrespondiente, anchoRealMosaico, altoRealMosaico);
         for (int k = 0;k< imgReducida.getWidth();k++) {
           for (int l = 0;l<imgReducida.getHeight();l++) {
@@ -172,27 +180,99 @@ public class Filtros{
     return abreImagen(rutaImg);
   }
 
-  public BufferedImage escogeImagenRiemersma(int red, int green, int blue){
+  public BufferedImage escogeImagenLineal(int r1, int g1, int b1){
+    BufferedImage img = null;
+    BufferedReader br = null;
+    String rutaImg = "";
+    String linea;
+    double restaminima = 16000000;
+		try {
+      br = new BufferedReader(new FileReader("promedios.txt"));
+
+			while ((linea = br.readLine()) != null) {
+        String[] pathRGB = linea.split(" --> ");
+        String[] coloresRGB = pathRGB[1].split(" ");
+        int r2 = Integer.parseInt(coloresRGB[0]);
+        int g2 = Integer.parseInt(coloresRGB[1]);
+        int b2 = Integer.parseInt(coloresRGB[2]);
+
+        double colorImagen = (655335*r1)+(256*g1)+(b1);
+
+        double colorImagenTemp = (655335*r2)+(256*g2)+(b2);
+
+        double resta = Math.abs(colorImagen-colorImagenTemp);
+
+        if(restaminima > resta){
+          rutaImg = pathRGB[0];
+          restaminima = resta;
+        }
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    return abreImagen(rutaImg);
+  }
+
+  public BufferedImage escogeImagenEuclidiana(int r1, int g1, int b1){
     BufferedImage img = null;
     BufferedReader br = null;
     String rutaImg = "";
     String linea;
 		try {
       br = new BufferedReader(new FileReader("promedios.txt"));
-      int riemersmaMinima = 255;
+      double euclidianaMinima = 255;
 			while ((linea = br.readLine()) != null) {
         String[] pathRGB = linea.split(" --> ");
         String[] coloresRGB = pathRGB[1].split(" ");
-        int imgR = Integer.parseInt(coloresRGB[0]);
-        int imgG = Integer.parseInt(coloresRGB[1]);
-        int imgB = Integer.parseInt(coloresRGB[2]);
-        int difR = Math.abs(red-imgR);
-        int difG = Math.abs(green-imgG);
-        int difB = Math.abs(blue-imgB);
-        int sumaRestas = difR+difG+difB;
-        if(riemersmaMinima > sumaRestas){
+        int r2 = Integer.parseInt(coloresRGB[0]);
+        int g2 = Integer.parseInt(coloresRGB[1]);
+        int b2 = Integer.parseInt(coloresRGB[2]);
+
+
+        double euclidianaP1 = Math.pow((r1-r2),2);
+        double euclidianaP2 = Math.pow((g1-g2),2);
+        double euclidianaP3 = Math.pow((b1-b2),2);
+
+        double euclidianaActual = Math.sqrt(euclidianaP1+euclidianaP2+euclidianaP3);
+        if(euclidianaMinima > euclidianaActual){
           rutaImg = pathRGB[0];
-          riemersmaMinima = sumaRestas;
+          euclidianaMinima = euclidianaActual;
+        }
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    return abreImagen(rutaImg);
+  }
+
+  public BufferedImage escogeImagenRiemersma(int r1, int g1, int b1){
+    BufferedImage img = null;
+    BufferedReader br = null;
+    String rutaImg = "";
+    String linea;
+		try {
+      br = new BufferedReader(new FileReader("promedios.txt"));
+      double riemersmaMinima = 255;
+			while ((linea = br.readLine()) != null) {
+        String[] pathRGB = linea.split(" --> ");
+        String[] coloresRGB = pathRGB[1].split(" ");
+        int r2 = Integer.parseInt(coloresRGB[0]);
+        int g2 = Integer.parseInt(coloresRGB[1]);
+        int b2 = Integer.parseInt(coloresRGB[2]);
+
+        double r = (r1+r2)/2;
+        double deltaR = r1-r2;
+        double deltaG = g1-g2;
+        double deltaB = b1-b2;
+
+        double riemersmaP1 = (2+(r/256))*(Math.pow(deltaR,2));
+        double riemersmaP2 = Math.pow((4*(deltaG)),2);
+        double riemersmaP3 = (2+((255-r)/256))*(Math.pow(deltaB,2));
+
+        double riemersmaActual = Math.sqrt(riemersmaP1+riemersmaP2+riemersmaP3);
+        if(riemersmaMinima > riemersmaActual){
+          rutaImg = pathRGB[0];
+          riemersmaMinima = riemersmaActual;
         }
 			}
 		} catch (Exception e) {
