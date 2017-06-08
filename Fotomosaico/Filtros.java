@@ -266,7 +266,7 @@ public class Filtros{
         double deltaB = b1-b2;
 
         double riemersmaP1 = (2+(r/256))*(Math.pow(deltaR,2));
-        double riemersmaP2 = Math.pow((4*(deltaG)),2);
+        double riemersmaP2 = 4*Math.pow(deltaG,2);
         double riemersmaP3 = (2+((255-r)/256))*(Math.pow(deltaB,2));
 
         double riemersmaActual = Math.sqrt(riemersmaP1+riemersmaP2+riemersmaP3);

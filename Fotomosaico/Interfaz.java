@@ -49,6 +49,7 @@ public class Interfaz extends Application {
     String ruta;
     String ruta2 = "";
     BufferedImage descargarImg;
+    BufferedImage blendingImg;
     int cuentaDescargas = 1;
     //TEmp
     Image image;
@@ -139,6 +140,18 @@ public class Interfaz extends Application {
           }
       });
       /******************************Fotomosaico*********************************/
+      /********************************Blending**********************************/
+      Menu blending = new Menu("Blending");
+      MenuItem b1 = new MenuItem("Aplicar");
+      blending.getItems().addAll(b1);
+      b1.setAccelerator(KeyCombination.keyCombination("Shortcut+B"));
+      b1.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            blendingImg = f.fusion(descargarImg,f.abreImagen(ruta),50,50);
+            iv2.setImage(SwingFXUtils.toFXImage(blendingImg, null));
+          }
+      });
+      /********************************Blending**********************************/
       /*****************************Descargar********************************/
       descargar.setOnAction(new EventHandler<ActionEvent>() {
         public void handle(ActionEvent t) {
@@ -159,7 +172,7 @@ public class Interfaz extends Application {
       iv2.setSmooth(true);
       iv2.setCache(true);
 
-      menuBar.getMenus().addAll(archivo, filtrosBasicos);
+      menuBar.getMenus().addAll(archivo, filtrosBasicos, blending);
 
       GridPane gridpane = new GridPane();
       GridPane.setConstraints(menuBar, 1,1);
