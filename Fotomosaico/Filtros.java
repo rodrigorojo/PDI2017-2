@@ -121,25 +121,26 @@ public class Filtros{
     return prom;
   }
 
-  public BufferedImage fotomosaico(BufferedImage img, String forma){
-    int anchoRealMosaico = rightDivPlus(10,img.getWidth());
-    int altoRealMosaico = rightDivPlus(10,img.getHeight());
+  public BufferedImage fotomosaico(int ancho, int alto, BufferedImage img, Boolean repetir, String forma){
+    int anchoRealMosaico = rightDivPlus(ancho,img.getWidth());
+    int altoRealMosaico = rightDivPlus(alto,img.getHeight());
     BufferedImage mosaicoPromedios = mosaico(anchoRealMosaico, altoRealMosaico, img);
     BufferedImage resultado = new BufferedImage(img.getWidth(),img.getHeight(),BufferedImage.TYPE_INT_RGB);
-
+    System.out.println(forma+" repetir: "+repetir);
     BufferedImage imgMosaico = mosaico(anchoRealMosaico,altoRealMosaico,img);
+    ArrayList<String> fotosUsadas = new ArrayList<String>();
     for(int i = 0; i<imgMosaico.getWidth(); i+=anchoRealMosaico){
       for(int j = 0; j<imgMosaico.getHeight(); j+=altoRealMosaico){
         Color c = new Color(imgMosaico.getRGB(i,j));
         BufferedImage imgCorrespondiente = null;
         if(forma.equals("LINEAL"))
-          imgCorrespondiente = escogeImagenLineal(c.getRed(),c.getGreen(),c.getBlue());
+          imgCorrespondiente = escogeImagenLineal(c.getRed(),c.getGreen(),c.getBlue(),repetir,fotosUsadas);
         else if(forma.equals("EUCLIDIANA"))
-          imgCorrespondiente = escogeImagenEuclidiana(c.getRed(),c.getGreen(),c.getBlue());
+          imgCorrespondiente = escogeImagenEuclidiana(c.getRed(),c.getGreen(),c.getBlue(),repetir,fotosUsadas);
         else if(forma.equals("RIEMERSMA"))
-          imgCorrespondiente = escogeImagenRiemersma(c.getRed(),c.getGreen(),c.getBlue());
+          imgCorrespondiente = escogeImagenRiemersma(c.getRed(),c.getGreen(),c.getBlue(),repetir,fotosUsadas);
         else
-          imgCorrespondiente = escogeImagenRestas(c.getRed(),c.getGreen(),c.getBlue());
+          imgCorrespondiente = escogeImagenRestas(c.getRed(),c.getGreen(),c.getBlue(),repetir,fotosUsadas);
         BufferedImage imgReducida = reducirImagen(imgCorrespondiente, anchoRealMosaico, altoRealMosaico);
         for (int k = 0;k< imgReducida.getWidth();k++) {
           for (int l = 0;l<imgReducida.getHeight();l++) {
@@ -151,7 +152,7 @@ public class Filtros{
     }
     return resultado;
   }
-  public BufferedImage escogeImagenRestas(int red, int green, int blue){
+  public BufferedImage escogeImagenRestas(int red, int green, int blue, Boolean repetir, ArrayList<String> fotosUsadas){
     BufferedImage img = null;
     BufferedReader br = null;
     String rutaImg = "";
@@ -170,17 +171,26 @@ public class Filtros{
         int difB = Math.abs(blue-imgB);
         int sumaRestas = difR+difG+difB;
         if(restaMinima > sumaRestas){
-          rutaImg = pathRGB[0];
-          restaMinima = sumaRestas;
+          if(!repetir){
+            if(!fotosUsadas.contains(pathRGB[0])){
+              rutaImg = pathRGB[0];
+              restaMinima = sumaRestas;
+            }
+          }else{
+            rutaImg = pathRGB[0];
+            restaMinima = sumaRestas;
+          }
         }
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+    if(!repetir)
+      fotosUsadas.add(rutaImg);
     return abreImagen(rutaImg);
   }
 
-  public BufferedImage escogeImagenLineal(int r1, int g1, int b1){
+  public BufferedImage escogeImagenLineal(int r1, int g1, int b1, Boolean repetir, ArrayList<String> fotosUsadas){
     BufferedImage img = null;
     BufferedReader br = null;
     String rutaImg = "";
@@ -188,32 +198,36 @@ public class Filtros{
     double restaminima = 16000000;
 		try {
       br = new BufferedReader(new FileReader("promedios.txt"));
-
 			while ((linea = br.readLine()) != null) {
         String[] pathRGB = linea.split(" --> ");
         String[] coloresRGB = pathRGB[1].split(" ");
         int r2 = Integer.parseInt(coloresRGB[0]);
         int g2 = Integer.parseInt(coloresRGB[1]);
         int b2 = Integer.parseInt(coloresRGB[2]);
-
         double colorImagen = (655335*r1)+(256*g1)+(b1);
-
         double colorImagenTemp = (655335*r2)+(256*g2)+(b2);
-
         double resta = Math.abs(colorImagen-colorImagenTemp);
-
         if(restaminima > resta){
-          rutaImg = pathRGB[0];
-          restaminima = resta;
+          if(!repetir){
+            if(!fotosUsadas.contains(pathRGB[0])){
+              rutaImg = pathRGB[0];
+              restaminima = resta;
+            }
+          }else{
+            rutaImg = pathRGB[0];
+            restaminima = resta;
+          }
         }
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+    if(!repetir)
+      fotosUsadas.add(rutaImg);
     return abreImagen(rutaImg);
   }
 
-  public BufferedImage escogeImagenEuclidiana(int r1, int g1, int b1){
+  public BufferedImage escogeImagenEuclidiana(int r1, int g1, int b1, Boolean repetir, ArrayList<String> fotosUsadas){
     BufferedImage img = null;
     BufferedReader br = null;
     String rutaImg = "";
@@ -227,25 +241,31 @@ public class Filtros{
         int r2 = Integer.parseInt(coloresRGB[0]);
         int g2 = Integer.parseInt(coloresRGB[1]);
         int b2 = Integer.parseInt(coloresRGB[2]);
-
-
         double euclidianaP1 = Math.pow((r1-r2),2);
         double euclidianaP2 = Math.pow((g1-g2),2);
         double euclidianaP3 = Math.pow((b1-b2),2);
-
         double euclidianaActual = Math.sqrt(euclidianaP1+euclidianaP2+euclidianaP3);
         if(euclidianaMinima > euclidianaActual){
-          rutaImg = pathRGB[0];
-          euclidianaMinima = euclidianaActual;
+          if(!repetir){
+            if(!fotosUsadas.contains(pathRGB[0])){
+              rutaImg = pathRGB[0];
+              euclidianaMinima = euclidianaActual;
+            }
+          }else{
+            rutaImg = pathRGB[0];
+            euclidianaMinima = euclidianaActual;
+          }
         }
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+    if(!repetir)
+      fotosUsadas.add(rutaImg);
     return abreImagen(rutaImg);
   }
 
-  public BufferedImage escogeImagenRiemersma(int r1, int g1, int b1){
+  public BufferedImage escogeImagenRiemersma(int r1, int g1, int b1, Boolean repetir, ArrayList<String> fotosUsadas){
     BufferedImage img = null;
     BufferedReader br = null;
     String rutaImg = "";
@@ -271,13 +291,22 @@ public class Filtros{
 
         double riemersmaActual = Math.sqrt(riemersmaP1+riemersmaP2+riemersmaP3);
         if(riemersmaMinima > riemersmaActual){
-          rutaImg = pathRGB[0];
-          riemersmaMinima = riemersmaActual;
+          if(!repetir){
+            if(!fotosUsadas.contains(pathRGB[0])){
+              rutaImg = pathRGB[0];
+              riemersmaMinima = riemersmaActual;
+            }
+          }else{
+            rutaImg = pathRGB[0];
+            riemersmaMinima = riemersmaActual;
+          }
         }
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+    if(!repetir)
+      fotosUsadas.add(rutaImg);
     return abreImagen(rutaImg);
   }
 
@@ -371,8 +400,8 @@ public class Filtros{
         double redImg2 = (double) color2.getRed();
 				double greenImg2 = (double) color2.getGreen();
 		    double blueImg2 = (double) color2.getBlue();
-		    double p1 = (double) 35;
-		    double p2 = (double) 65;
+		    double p1 = (double) porcentaje1;
+		    double p2 = (double) porcentaje2;
 		    int redN = (int)Math.floor((redImg1*(p1/100)) + (redImg2*(p2/100)));
 		    int greenN = (int)Math.floor((greenImg1*(p1/100)) + (greenImg2*(p2/100)));
 		    int blueN = (int)Math.floor((blueImg1*(p1/100)) + (blueImg2*(p2/100)));
@@ -383,6 +412,16 @@ public class Filtros{
   }
 
 
+  public BufferedImage unColor(int r, int g, int b, int ancho, int alto){
+    BufferedImage bufferedImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+    Color c = new Color(r,g,b);
+    for(int i = 0; i<ancho; i++){
+      for(int j = 0; j<alto; j++){
+        bufferedImage.setRGB(i,j,c.getRGB());
+      }
+    }
+    return bufferedImage;
+  }
   /**
   * Crear un archivo .jpg
   */

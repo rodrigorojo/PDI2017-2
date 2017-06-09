@@ -51,6 +51,8 @@ public class Interfaz extends Application {
     BufferedImage descargarImg;
     BufferedImage blendingImg;
     int cuentaDescargas = 1;
+    int ancho = 50;
+    int alto = 50;
     //TEmp
     Image image;
 
@@ -106,36 +108,122 @@ public class Interfaz extends Application {
       /*************************Abrir y Descargar******************************/
       /******************************Fotomosaico*********************************/
       Menu filtrosBasicos = new Menu("Fotomosaico");
-      MenuItem f1 = new MenuItem("1 - Cear con Linenal");
-      MenuItem f2 = new MenuItem("2 - Cear con Euclidiana");
-      MenuItem f3 = new MenuItem("3 - Cear con Rimersma");
-      MenuItem f4 = new MenuItem("4 - Cear con Restas");
-      filtrosBasicos.getItems().addAll(f1,f2,f3,f4);
+      MenuItem ft = new MenuItem("Cambiar Tamaño del Cuadro");
+      MenuItem f1 = new MenuItem("1 - Lineal con repetición");
+      MenuItem f2 = new MenuItem("2 - Euclidiana con repetición");
+      MenuItem f3 = new MenuItem("3 - Riemersma con repetición");
+      MenuItem f4 = new MenuItem("4 - Restas con repetición");
+      MenuItem f5 = new MenuItem("5 - Lineal sin repetición");
+      MenuItem f6 = new MenuItem("6 - Euclidiana sin repetición");
+      MenuItem f7 = new MenuItem("7 - Riemersma sin repetición");
+      MenuItem f8 = new MenuItem("8 - Restas sin repetición");
+      filtrosBasicos.getItems().addAll(ft,f1,f2,f3,f4,f5,f6,f7,f8);
+      ft.setAccelerator(KeyCombination.keyCombination("Shortcut+T"));
+      ft.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            Stage stageMosaico = new Stage();
+            int maxMosaico = (int) image.getWidth()/5;
+            GridPane gridpaneMosaico = new GridPane();
+            ColumnConstraints col1 = new ColumnConstraints();
+            ColumnConstraints col2 = new ColumnConstraints();
+            col2.setMinWidth(400);
+            gridpaneMosaico.getColumnConstraints().addAll(col1,col2);
+            Label labelAncho = new Label("Ancho");
+            Slider sliderAncho = new Slider(1, maxMosaico, ancho);
+            Label sliderAnchoValor = new Label(ancho+"");
+            Label labelAlto = new Label("Alto");
+            Slider sliderAlto = new Slider(1, maxMosaico, alto);
+            Label sliderAltoValor = new Label(alto+"");
+            Button buttonMosaico = new Button("Cambiar tamaño");
+            gridpaneMosaico.setConstraints(labelAncho, 1,1);
+            gridpaneMosaico.setConstraints(sliderAncho, 1,2);
+            gridpaneMosaico.setConstraints(sliderAnchoValor, 2,2);
+            gridpaneMosaico.setConstraints(labelAlto, 1,3);
+            gridpaneMosaico.setConstraints(sliderAlto, 1,4);
+            gridpaneMosaico.setConstraints(sliderAltoValor, 2,4);
+            gridpaneMosaico.setConstraints(buttonMosaico, 1,5);
+            gridpaneMosaico.getChildren().addAll(labelAncho,sliderAncho,sliderAnchoValor,labelAlto,sliderAlto,sliderAltoValor,buttonMosaico);
+            Scene sceneMosaico = new Scene(gridpaneMosaico, 470, 100);
+            stageMosaico.setTitle("Tamaño de los mosaicos");
+            stageMosaico.setScene(sceneMosaico);
+            stageMosaico.show();
+            sliderAncho.valueProperty().addListener(new ChangeListener() {
+              @Override
+                public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                    sliderAnchoValor.textProperty().setValue(
+                            String.valueOf((int) sliderAncho.getValue()));
+                            sliderAlto.setValue(sliderAncho.getValue());
+                }
+            });
+            sliderAlto.valueProperty().addListener(new ChangeListener() {
+              @Override
+                public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                    sliderAltoValor.textProperty().setValue(
+                            String.valueOf((int) sliderAlto.getValue()));
+                            sliderAlto.setValue(sliderAlto.getValue());
+                }
+            });
+            buttonMosaico.setOnAction(new EventHandler<ActionEvent>() {
+              public void handle(ActionEvent t) {
+                ancho = (int)sliderAncho.getValue();
+                alto = (int)sliderAlto.getValue();
+              }
+            });
+          }
+      });
       f1.setAccelerator(KeyCombination.keyCombination("Shortcut+1"));
       f1.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            descargarImg = f.fotomosaico(f.abreImagen(ruta),"LINEAL");
+            descargarImg = f.fotomosaico(ancho,alto,f.abreImagen(ruta),true,"LINEAL");
             iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
           }
       });
       f2.setAccelerator(KeyCombination.keyCombination("Shortcut+2"));
       f2.setOnAction(new EventHandler<ActionEvent>() {
         public void handle(ActionEvent t) {
-          descargarImg = f.fotomosaico(f.abreImagen(ruta),"EUCLIDIANA");
+          descargarImg = f.fotomosaico(ancho,alto,f.abreImagen(ruta),true,"EUCLIDIANA");
           iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
         }
       });
       f3.setAccelerator(KeyCombination.keyCombination("Shortcut+3"));
       f3.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            descargarImg = f.fotomosaico(f.abreImagen(ruta),"RIEMERSMA");
+            descargarImg = f.fotomosaico(ancho,alto,f.abreImagen(ruta),true,"RIEMERSMA");
             iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
           }
       });
       f4.setAccelerator(KeyCombination.keyCombination("Shortcut+4"));
       f4.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            descargarImg = f.fotomosaico(f.abreImagen(ruta),"RESTAS");
+            descargarImg = f.fotomosaico(ancho,alto,f.abreImagen(ruta),true,"RESTAS");
+            iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
+          }
+      });
+      f5.setAccelerator(KeyCombination.keyCombination("Shortcut+5"));
+      f5.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            descargarImg = f.fotomosaico(ancho,alto,f.abreImagen(ruta),false,"LINEAL");
+            iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
+          }
+      });
+      f6.setAccelerator(KeyCombination.keyCombination("Shortcut+6"));
+      f6.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            descargarImg = f.fotomosaico(ancho,alto,f.abreImagen(ruta),false,"EUCLIDIANA");
+            iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
+          }
+      });
+      f7.setAccelerator(KeyCombination.keyCombination("Shortcut+7"));
+      f7.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            descargarImg = f.fotomosaico(ancho,alto,f.abreImagen(ruta),false,"RIEMERSMA");
+            iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
+          }
+      });
+      f8.setAccelerator(KeyCombination.keyCombination("Shortcut+8"));
+      f8.setOnAction(new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent t) {
+            descargarImg = f.fotomosaico(ancho,alto,f.abreImagen(ruta),false,"RESTAS");
             iv2.setImage(SwingFXUtils.toFXImage(descargarImg, null));
           }
       });
@@ -147,8 +235,36 @@ public class Interfaz extends Application {
       b1.setAccelerator(KeyCombination.keyCombination("Shortcut+B"));
       b1.setOnAction(new EventHandler<ActionEvent>() {
           public void handle(ActionEvent t) {
-            blendingImg = f.fusion(descargarImg,f.abreImagen(ruta),50,50);
-            iv2.setImage(SwingFXUtils.toFXImage(blendingImg, null));
+            Stage stageFusion = new Stage();
+            GridPane gridpaneFusion = new GridPane();
+
+            Slider sliderFusion = new Slider(0, 100, 70);
+            Label sliderFusionValor = new Label("70");
+
+            Button buttonFusionar = new Button("Fusionar");
+            gridpaneFusion.setConstraints(sliderFusion, 1,1);
+            gridpaneFusion.setConstraints(sliderFusionValor, 1,4,1,1,HPos.CENTER,VPos.CENTER);
+            gridpaneFusion.setConstraints(buttonFusionar, 1,5,1,1,HPos.RIGHT,VPos.CENTER);
+
+            gridpaneFusion.getChildren().addAll(buttonFusionar,sliderFusion,sliderFusionValor);
+            Scene sceneTexto = new Scene(gridpaneFusion, 150, 75);
+            stageFusion.setTitle("Blending");
+            stageFusion.setScene(sceneTexto);
+            stageFusion.show();
+
+            sliderFusion.valueProperty().addListener(new ChangeListener() {
+            @Override
+              public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                  sliderFusionValor.textProperty().setValue(String.valueOf((int) sliderFusion.getValue()));
+                  sliderFusion.setValue(sliderFusion.getValue());
+              }
+            });
+            buttonFusionar.setOnAction(new EventHandler<ActionEvent>() {
+              public void handle(ActionEvent t) {
+                blendingImg = f.fusion(descargarImg,f.abreImagen(ruta), (int)sliderFusion.getValue(), 100-(int)sliderFusion.getValue());
+                iv2.setImage(SwingFXUtils.toFXImage(blendingImg, null));
+              }
+            });
           }
       });
       /********************************Blending**********************************/
@@ -181,7 +297,7 @@ public class Interfaz extends Application {
       //gridpane.getChildren().addAll(menuBar, descargar, filtrosBtn,filtrosCBtn,filtrosLBtn,filtrosRFMBtn,iv1,iv2);
       gridpane.getChildren().addAll(menuBar, iv1,iv2);
       Scene scene = new Scene(gridpane, 1000, 693);
-      primaryStage.setTitle("Filtros RR");
+      primaryStage.setTitle("Fotomosaico RR");
       primaryStage.setScene(scene);
       primaryStage.show();
   }
